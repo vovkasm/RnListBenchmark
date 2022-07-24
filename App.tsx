@@ -1,117 +1,65 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
+import React from 'react';
+import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
 
-import React, {type PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+type DataItem = {
+  id: string;
+  userlogin: string;
 };
 
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+const testdata: DataItem[] = [];
+for (let i = 0; i < 10000; i++) {
+  testdata.push({
+    id: `id${i}`,
+    userlogin: `Login${Math.floor(Math.random() * 100000)}`,
+  });
+}
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+export default function App() {
+  const [data, setData] = React.useState<DataItem[]>([]);
+
+  function changedata() {
+    data.length > 1 ? setData([]) : setData(testdata);
+  }
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <>
+      <View style={styles.container}>
+        <Button title="fill data" onPress={changedata} />
+        <View style={styles.flatlist}>
+          <FlatList
+            data={data}
+            renderItem={info => <Item item={info.item} />}
+            keyExtractor={item => item.id}
+          />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </>
   );
-};
+}
+
+const Item = ({item}: {item: DataItem}) => (
+  <View style={styles.message}>
+    <Text>{item.id}</Text>
+    <Text> {item.userlogin}</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 30,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  flatlist: {
+    width: '90%',
+    height: 300,
+    borderColor: 'green',
+    borderWidth: 1,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  message: {
+    flexDirection: 'row',
   },
 });
-
-export default App;
