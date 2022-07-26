@@ -24,9 +24,10 @@ export default function App() {
   return (
     <>
       <View style={styles.container}>
-        <Button title="fill data" onPress={changedata} />
+        <Button testID="fill_data" title="fill data" onPress={changedata} />
         <View style={styles.flatlist}>
           <FlatList
+            testID="list"
             data={data}
             renderItem={info => <Item item={info.item} />}
             keyExtractor={item => item.id}
